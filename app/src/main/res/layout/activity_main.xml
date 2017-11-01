@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <!--使用import来导入需要用的包-->
+        <import type="com.lh.mvvm.bean.UserBean" />
+
+        <!--使用alias来给包设置别名，用于区别不同包路径下的同名类-->
+        <import
+            alias="observableUserBean"
+            type="com.lh.mvvm.observable.UserBean" />
+
+        <import
+            alias="mUtils"
+            type="com.lh.mvvm.utils.MvvmUtils" />
+
+        <import type="java.util.ArrayList" />
+
+        <import type="android.databinding.ObservableArrayList" />
+
+        <!--使用关键字variable来声明一个变量，name为变量名，type为指向的对象，可以是类名也可以是类名的别名-->
+        <variable
+            name="user"
+            type="UserBean" />
+
+        <!--双向绑定数据的对象-->
+        <variable
+            name="observableuser"
+            type="observableUserBean" />
+
+        <!--泛型的支持会在编译时期报红线，<>需要通过转义字符才行，&lt;数据类型>  -->
+        <variable
+            name="list"
+            type="ArrayList&lt;UserBean>" />
+
+        <!--对于基本类型，可以像java代码一样不用去导入包，直接使用-->
+        <variable
+            name="postion"
+            type="int" />
+
+        <!--  &lt;!&ndash;Observable数据改变自动更新，用于数据和view的双向绑定&ndash;&gt;
+          <variable
+              name="list1"
+              type="ObservableArrayList&lt;UserBean>" />
+  -->
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--使用变量-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{user.userName}" />
+
+        <!--使用自定义方法-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{mUtils.capitalize(user.userName)}" />
+
+        <!--android:text="@{user.userName != null ? user.userName : user.userAge}"
+        等价于
+        android:text="@{user.userName ?? user.userAge}"
+        -->
+        <!--这里不是单引号，是中文字符~符号按出来的，位于Esc按键的下方-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{user.userName != null ? user.userName : user.userAge + ``}" />
+
+        <!--这里最外层使用单引号，里面需要将其他类型转成字符串的时候，用双引号-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{user.userName ?? user.userAge + ""}' />
+
+        <!--使用资源变量，如果不强转会报错，一般报错信息指明了报错原因-->
+        <!--这里的android:visibility="@{user.userId == 1 ? View.GONE : View.VISIBLE}会报错，我们直接用代码所指向的值，一样起作用-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@{user.userId==1? (int)@dimen/padding_x : (int)@dimen/padding_xx}"
+            android:text="@{@string/app_name +`我擦泪`}"
+            android:visibility="@{user.userId == 1 ? 0x00000000 : 0x00000008}" />
+
+        <!--双向绑定，当前observableuserbean 下面的数据是双向绑定的，只要数据改变，view中的数据也会跟着改变-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{`双向绑定数据，姓名：`+ observableuser.userName}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{`双向绑定数据，年龄：`+ observableuser.userAge}" />
+
+        <!--获取集合中数据的方式-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{list.get(postion).userName}" />
+
+        <!--List集合既可以和数组一样通过索引获取值list[index]方式，也可以调用API-->
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{list[postion].userName}" />
+
+        <Button
+            android:id="@+id/btn_test1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="双向绑定数据" />
+        <Button
+            android:id="@+id/btn_listview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="listview的应用" />
+        <Button
+            android:id="@+id/btn_recyclerview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="recyclerview的应用" />
+    </LinearLayout>
+</layout>

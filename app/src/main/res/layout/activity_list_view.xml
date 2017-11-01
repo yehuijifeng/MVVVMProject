@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <!--引用自定义的适配器listviewadapter-->
+        <import type="com.lh.mvvm.adapter.ListViewAdapter" />
+
+        <variable
+            name="adapter"
+            type="ListViewAdapter" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--将适配器绑定到listview-->
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:adapter="@{adapter}" />
+    </LinearLayout>
+</layout>
